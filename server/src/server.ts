@@ -4,6 +4,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import { connectDB } from "./config/database";
 import authRoute from "./routes/auth";
+import emailRoute from "./routes/email";
 
 dotenv.config();
 connectDB();
@@ -21,6 +22,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/auth", authRoute);
+app.use("/api/templates", emailRoute);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
