@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-interface EmailTemplateProps {
+export interface EmailTemplateProps {
   name: string;
   subject: string;
   body: string;

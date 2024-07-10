@@ -1,5 +1,6 @@
-import Dashboard from "./components/dashboard";
-import Login from "./components/login";
+import Dashboard from "./components/Dashboard";
+import EmailLogs from "./components/EmailLogs";
+import Login from "./components/Login";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
@@ -9,6 +10,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/logs" element={<EmailLogs />} />
         </Routes>
       </BrowserRouter>
     </>
