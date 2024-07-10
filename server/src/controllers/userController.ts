@@ -56,7 +56,7 @@ export const registerUser = async (
       from: '"Bulk Email Processor" <no-reply@bulkemailprocessor.com>',
       to: user.email,
       subject: "Email Verification",
-      text: `Please verify your email by clicking the following link: http://localhost:3000/verify/${verificationToken}`,
+      text: `Please verify your email by clicking the following link: http://localhost:5000/api/auth/verify/${verificationToken}`,
     };
 
     await transporter.sendMail(mailOptions);
@@ -69,10 +69,13 @@ export const registerUser = async (
 };
 
 export const verifyToken = async (req: Request, res: Response) => {
+  console.log(`Verification request received for token: ${req.params.token}`);
+
   try {
     const user = await User.findOne({ verificationToken: req.params.token });
 
     if (!user) {
+      console.log("Invalid token");
       return res.status(400).json({ msg: "Invalid token" });
     }
 
@@ -80,9 +83,10 @@ export const verifyToken = async (req: Request, res: Response) => {
     user.verificationToken = "";
     await user.save();
 
+    console.log("Email verified");
     res.status(200).json({ msg: "Email verified" });
   } catch (err) {
-    console.error(err.message);
+    console.error("Error verifying email:", err.message);
     res.status(500).send("Server error");
   }
 };

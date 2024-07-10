@@ -12,7 +12,7 @@ const EmailLogs: React.FC = () => {
 
   useEffect(() => {
     const fetchLogs = async () => {
-      const response = await axios.get("/api/email/logs", {
+      const response = await axios.get("http://localhost:5000/api/email/logs", {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       setLogs(response.data);

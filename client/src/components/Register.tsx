@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Register: React.FC = () => {
   const [name, setName] = useState("");
@@ -7,15 +8,18 @@ const Register: React.FC = () => {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
 
+  const navigate = useNavigate();
+
   const onSubmitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await axios.post("/api/auth/register", {
+      const res = await axios.post("http://localhost:5000/api/auth/register", {
         name,
         email,
         password,
       });
       setMessage(res.data);
+      navigate("/");
     } catch (err: string | any) {
       setMessage(err.response.data.msg || "Error occurred");
     }
@@ -28,7 +32,18 @@ const Register: React.FC = () => {
           <h4 className="block font-sans text-2xl font-semibold text-center leading-snug tracking-normal text-blue-gray-900 antialiased">
             Register Your Account
           </h4>
-          {message && <p>{message}</p>}
+
+          {message && (
+            <div>
+              <div className="flex flex-row bg-gray-900 h-10 w-[400px] rounded-[30px] mt-5">
+                <span className="flex flex-col justify-center text-white font-bold grow-[1] max-w-[90%] text-center">
+                  {message}
+                </span>
+                <div className="w-[10%] bg-red-400 rounded-r-2xl shadow-[0_0_20px_#ff444477]"></div>
+              </div>
+            </div>
+          )}
+
           <form
             className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96"
             onSubmit={onSubmitHandler}

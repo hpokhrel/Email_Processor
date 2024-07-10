@@ -1,11 +1,11 @@
 import mongoose, { Document } from "mongoose";
 
 export interface userProps extends Document {
-    name: string;
-    email: string;
-    password: string;
-    isVerified: boolean;
-    verificationToken: string;
+  name: string;
+  email: string;
+  password: string;
+  isVerified: boolean;
+  verificationToken: string;
 }
 
 const UserSchema = new mongoose.Schema({
@@ -28,7 +28,6 @@ const UserSchema = new mongoose.Schema({
   },
   verificationToken: {
     type: String,
-    required: true,
   },
 });
 

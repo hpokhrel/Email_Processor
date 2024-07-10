@@ -9,7 +9,6 @@ import {
 const emailRoute = express.Router();
 
 emailRoute.get("/", authMiddleware, fetchTemplates);
-
 emailRoute.post("/bulk-email", authMiddleware, bulkEmailTemplate);
 
 export default emailRoute;

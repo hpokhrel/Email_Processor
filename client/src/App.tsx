@@ -11,7 +11,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/register" element={<Register />} />
-          <Route path="/verify" element={<VerifyEmail />} />
+          <Route path="/verify/:token" element={<VerifyEmail />} />
           <Route path="/" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/logs" element={<EmailLogs />} />

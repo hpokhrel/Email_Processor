@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
 
 interface TemplateProps {
@@ -12,7 +11,6 @@ const Dashboard: React.FC = () => {
   const [templates, setTemplates] = useState([]);
   const [selectedTemplate, setSelectedTemplate] = useState("");
   const [file, setFile] = useState<File | null>(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTemplates = async () => {
