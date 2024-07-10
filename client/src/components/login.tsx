@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
   const onSubmitHandler = async (e: React.FormEvent) => {
@@ -15,8 +16,10 @@ const Login: React.FC = () => {
         { email, password }
       );
       localStorage.setItem("token", response.data.token);
+      setMessage(response.data);
       navigate("/dashboard");
-    } catch (error) {
+    } catch (error: string | any) {
+      setMessage(error.response.data.msg || "Error occurred");
       console.error(error);
     }
   };
@@ -28,6 +31,16 @@ const Login: React.FC = () => {
           <h4 className="block font-sans text-2xl font-semibold text-center leading-snug tracking-normal text-blue-gray-900 antialiased">
             Login To Your Account
           </h4>
+          {message && (
+            <div>
+              <div className="flex flex-row bg-gray-900 h-10 w-[400px] rounded-[30px] mt-5">
+                <span className="flex flex-col justify-center text-white font-bold grow-[1] max-w-[90%] text-center">
+                  {message}
+                </span>
+                <div className="w-[10%] bg-red-400 rounded-r-2xl shadow-[0_0_20px_#ff444477]"></div>
+              </div>
+            </div>
+          )}
           <form
             className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96"
             onSubmit={onSubmitHandler}
@@ -78,9 +91,7 @@ const Login: React.FC = () => {
               className="mt-6 block w-full select-none rounded-full bg-green-800 py-3 px-6 text-center align-middle  uppercase text-white shadow-md shadow-green-800/20 transition-all hover:shadow-lg hover:shadow-green-800/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
               type="submit"
               data-ripple-light="true"
-              // disabled={loading}
             >
-              {/* {loading ? "Logging in..." : "Login"} */}
               Login
             </button>
             <div className="mt-4">

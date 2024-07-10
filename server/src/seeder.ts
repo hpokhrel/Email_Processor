@@ -9,18 +9,18 @@ const seedEmailTemplates = async () => {
   const templates = [
     {
       name: "Welcome",
-      subject: "Welcome to Our Service",
-      body: "Hello {{name}},\n\nWelcome to our service!\n\nBest regards,\nTeam",
+      subject: "Welcome to My services",
+      body: "Hello ,\n\nWelcome to My services!\n\nBest regards,\nTeam",
     },
     {
       name: "Password Reset",
       subject: "Reset Your Password",
-      body: "Hello {{name}},\n\nClick the link below to reset your password:\n{{resetLink}}\n\nBest regards,\nTeam",
+      body: "Hello ,\n\nClick the link below to reset your password:\n{{resetLink}}\n\nBest regards,\nTeam",
     },
     {
       name: "Newsletter",
       subject: "Our Latest News",
-      body: "Hello {{name}},\n\nHere is our latest newsletter.\n\nBest regards,\nTeam",
+      body: "Hello ,\n\nHere is our latest newsletter.\n\nBest regards,\nTeam",
     },
   ];
 

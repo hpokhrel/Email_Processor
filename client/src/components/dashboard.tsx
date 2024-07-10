@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import * as XLSX from "xlsx";
+import { useNavigate } from "react-router-dom";
 
 interface TemplateProps {
   _id: string;
@@ -8,9 +9,11 @@ interface TemplateProps {
 }
 
 const Dashboard: React.FC = () => {
-  const [templates, setTemplates] = useState([]);
-  const [selectedTemplate, setSelectedTemplate] = useState("");
+  const [templates, setTemplates] = useState<TemplateProps[]>([]);
+  const [selectedTemplate, setSelectedTemplate] = useState<string>("");
   const [file, setFile] = useState<File | null>(null);
+  const [sending, setSending] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTemplates = async () => {
@@ -42,6 +45,8 @@ const Dashboard: React.FC = () => {
     e.preventDefault();
     if (!file) return;
 
+    setSending(true);
+
     const reader = new FileReader();
     reader.onload = async (event) => {
       const data = new Uint8Array(event.target?.result as ArrayBuffer);
@@ -51,9 +56,11 @@ const Dashboard: React.FC = () => {
         header: 1,
       }) as string[][];
 
+      console.log(emailList);
+
       try {
         await axios.post(
-          "http://localhost:5000/api/bulk-email",
+          "http://localhost:5000/api/templates/bulk-email",
           { templateId: selectedTemplate, emails: emailList },
           {
             headers: {
@@ -64,10 +71,18 @@ const Dashboard: React.FC = () => {
         alert("Bulk email request submitted successfully");
       } catch (error) {
         console.error(error);
+        alert("An error occurred while sending bulk emails");
       }
+
+      setSending(false);
     };
 
     reader.readAsArrayBuffer(file);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/");
   };
 
   return (
@@ -75,7 +90,7 @@ const Dashboard: React.FC = () => {
       <div className="flex min-h-screen items-center justify-center">
         <div className="relative flex flex-col rounded-xl bg-transparent bg-clip-border text-gray-700 shadow-none">
           <h4 className="block font-sans text-2xl font-semibold text-center leading-snug tracking-normal text-blue-gray-900 antialiased">
-            Fie Upload Section
+            File Upload Section
           </h4>
           <form
             className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96"
@@ -90,7 +105,7 @@ const Dashboard: React.FC = () => {
                   onChange={(e) => setSelectedTemplate(e.target.value)}
                   required
                 >
-                  <option value="">Choose...</option>
+                  <option value="">Choose Templates</option>
                   {templates.map((template: TemplateProps) => (
                     <option key={template._id} value={template._id}>
                       {template.name}
@@ -119,19 +134,28 @@ const Dashboard: React.FC = () => {
                   aria-label="File"
                   className="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-blue-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[4.1] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-green-800 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:!border-green-800 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:!border-green-800 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500"
                 >
-                  Upload Email List (Excel)
+                  Upload Email List (Excel or CSV)
                 </label>
               </div>
             </div>
             <button
               id="submitBtn"
               data-testid="submitBtn"
-              className="mt-6 block w-full select-none rounded-full bg-green-800 py-3 px-6 text-center align-middle  uppercase text-white shadow-md shadow-green-800/20 transition-all hover:shadow-lg hover:shadow-green-800/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+              className="mt-6 block w-full select-none rounded-full bg-green-800 py-3 px-6 text-center align-middle uppercase text-white shadow-md shadow-green-800/20 transition-all hover:shadow-lg hover:shadow-green-800/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
               type="submit"
               data-ripple-light="true"
-              // disabled={loading}
+              disabled={sending}
             >
-              Submit
+              {sending ? "Sending..." : "Submit"}
+            </button>
+            <button className="mt-6 block w-full select-none rounded-full bg-green-800 py-3 px-6 text-center align-middle uppercase text-white shadow-md shadow-green-800/20 transition-all hover:shadow-lg hover:shadow-green-800/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
+              <a href="/logs">View Logs</a>
+            </button>
+            <button
+              onClick={handleLogout}
+              className="mt-6 block w-full select-none rounded-full bg-green-800 py-3 px-6 text-center align-middle uppercase text-white shadow-md shadow-green-800/20 transition-all hover:shadow-lg hover:shadow-green-800/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+            >
+              Logout
             </button>
           </form>
         </div>

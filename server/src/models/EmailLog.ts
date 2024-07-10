@@ -18,7 +18,7 @@ const EmailLogSchema = new mongoose.Schema({
   },
   date: {
     type: Date,
-    default: Date.now,
+    default: Date.now(),
   },
   error: {
     type: String,

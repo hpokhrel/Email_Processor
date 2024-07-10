@@ -105,7 +105,9 @@ export const loginUser = async (
     }
 
     if (!user.isVerified) {
-      return res.status(400).json({ msg: "Please verify your email" });
+      return res
+        .status(400)
+        .json({ msg: "Please verify your email first and then Retry" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
