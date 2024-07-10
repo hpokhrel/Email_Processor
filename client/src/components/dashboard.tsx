@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import * as XLSX from "xlsx";
 import { useNavigate } from "react-router-dom";
+import EmailLogs from "./EmailLogs";
 
 interface TemplateProps {
   _id: string;
@@ -87,7 +88,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <>
-      <div className="flex min-h-screen items-center justify-center">
+      <div className="flex my-10 items-center justify-center">
         <div className="relative flex flex-col rounded-xl bg-transparent bg-clip-border text-gray-700 shadow-none">
           <h4 className="block font-sans text-2xl font-semibold text-center leading-snug tracking-normal text-blue-gray-900 antialiased">
             File Upload Section
@@ -149,7 +150,7 @@ const Dashboard: React.FC = () => {
               {sending ? "Sending..." : "Submit"}
             </button>
             <button className="mt-6 block w-full select-none rounded-full bg-green-800 py-3 px-6 text-center align-middle uppercase text-white shadow-md shadow-green-800/20 transition-all hover:shadow-lg hover:shadow-green-800/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
-              <a href="/logs">View Logs</a>
+              <a href="/logs">View Logs Page</a>
             </button>
             <button
               onClick={handleLogout}
@@ -160,6 +161,7 @@ const Dashboard: React.FC = () => {
           </form>
         </div>
       </div>
+      <EmailLogs />
     </>
   );
 };
